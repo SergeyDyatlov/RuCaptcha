@@ -115,7 +115,7 @@ begin
     vErrors.Add('IP_BANNED', 'IP-адрес, с которого пришЄл запрос заблокирован из-за частых обращений с различными неверными ключами. Ѕлокировка снимаетс€ через час');
 
     if vErrors.ContainsKey(Answer) then
-      raise Exception.CreateFmt('RuCaptcha: ', [vErrors.Items[Answer]]);
+      raise Exception.CreateFmt('RuCaptcha: %s', [vErrors[Answer]]);
 
     Result := ReplaceStr(Answer, 'OK|', '');
   finally
@@ -137,7 +137,7 @@ begin
     vErrors.Add('REPORT_NOT_RECORDED', '“акой ответ сервер может отдать на жалобу (reportbad), если до этого вы пожаловались на большое количество верных распознаний');
 
     if vErrors.ContainsKey(Answer) then
-      raise Exception.CreateFmt('RuCaptcha: ', [vErrors.Items[Answer]]);
+      raise Exception.CreateFmt('RuCaptcha: %s', [vErrors[Answer]]);
 
     Result := ReplaceStr(Answer, 'OK|', '');
   finally
