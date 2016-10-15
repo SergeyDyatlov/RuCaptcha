@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899.12.30 00:00:00.000.352,=C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.235,=C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.458,C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\Unit1.dfm=C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\RuCaptcha\Main.dfm</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.458,C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\Unit1.pas=C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\RuCaptcha\Main.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.271,C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\RuCaptcha\Unit1.pas=C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\RuCaptcha\API.RuCaptcha.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.949,=C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\RuCaptcha\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.151,C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\RuCaptcha\RuCaptcha.dproj=C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\Project1.dproj</Transaction>
     <Transaction>1899.12.30 00:00:00.000.138,=C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
-    <Transaction>1899.12.30 00:00:00.000.151,C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\Project1.dproj=C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\RuCaptcha\RuCaptcha.dproj</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.458,C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\RuCaptcha\Main.dfm=C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\Unit1.dfm</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.458,C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\RuCaptcha\Main.pas=C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.949,=C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\RuCaptcha\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.271,C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\RuCaptcha\API.RuCaptcha.pas=C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\RuCaptcha\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.235,=C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
+    <Transaction>1899.12.30 00:00:00.000.352,=C:\Users\Meandor\Documents\Embarcadero\Studio\Projects\Unit1.pas</Transaction>
   </Transactions>
 </BorlandProject>
