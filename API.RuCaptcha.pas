@@ -17,7 +17,7 @@ type
   public
     constructor Create;
     destructor Destroy; override;
-    function Recognize(const FileName: string): string;
+    function Recognize(const FileName: string; out CaptchaId: string): string;
     procedure SendReport(const CaptchaId: string);
     property Balance: string read GetBalance;
   published
@@ -154,14 +154,12 @@ begin
   end;
 end;
 
-function TRuCaptcha.Recognize(const FileName: string): string;
-var
-  vCaptchaId: string;
+function TRuCaptcha.Recognize(const FileName: string; out CaptchaId: string): string;
 begin
-  vCaptchaId := UploadFile(FileName);
+  CaptchaId := UploadFile(FileName);
 
   repeat
-    Result := GetAnswer(vCaptchaId);
+    Result := GetAnswer(CaptchaId);
     Wait(2);
   until Result <> 'CAPCHA_NOT_READY';
 end;

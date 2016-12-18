@@ -18,15 +18,19 @@ type
     OpenPictureDialog1: TOpenPictureDialog;
     Label2: TLabel;
     Label3: TLabel;
+    Edit3: TEdit;
+    Button3: TButton;
     procedure Button1Click(Sender: TObject);
     procedure Button2Click(Sender: TObject);
     procedure Label3Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
   private
     { Private declarations }
     FileName: string;
     RuCaptcha: TRuCaptcha;
+    CaptchaId: string;
   public
     { Public declarations }
   end;
@@ -50,7 +54,13 @@ end;
 procedure TForm1.Button2Click(Sender: TObject);
 begin
   RuCaptcha.CaptchaKey := Edit1.Text;
-  Edit2.Text := RuCaptcha.Recognize(FileName);
+  Edit2.Text := RuCaptcha.Recognize(FileName, CaptchaId);
+  Edit3.Text := CaptchaId;
+end;
+
+procedure TForm1.Button3Click(Sender: TObject);
+begin
+  RuCaptcha.SendReport(CaptchaId);
 end;
 
 procedure TForm1.FormCreate(Sender: TObject);

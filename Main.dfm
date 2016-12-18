@@ -4,7 +4,7 @@ object Form1: TForm1
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Form1'
-  ClientHeight = 376
+  ClientHeight = 427
   ClientWidth = 331
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -110,15 +110,23 @@ object Form1: TForm1
     TabOrder = 3
     TextHint = #1054#1090#1074#1077#1090
   end
+  object Edit3: TEdit
+    Left = 16
+    Top = 384
+    Width = 153
+    Height = 27
+    TabOrder = 4
+  end
+  object Button3: TButton
+    Left = 185
+    Top = 382
+    Width = 128
+    Height = 32
+    Caption = #1055#1086#1078#1072#1083#1086#1074#1072#1090#1100#1089#1103
+    TabOrder = 5
+    OnClick = Button3Click
+  end
   object OpenPictureDialog1: TOpenPictureDialog
-    Filter = 
-      'All (*.gif;*.png;*.jpg;*.jpeg;*.bmp;*.tif;*.tiff;*.ico;*.emf;*.w' +
-      'mf)|*.gif;*.png;*.jpg;*.jpeg;*.bmp;*.tif;*.tiff;*.ico;*.emf;*.wm' +
-      'f|GIF Image (*.gif)|*.gif|Portable Network Graphics (*.png)|*.pn' +
-      'g|JPEG Image File (*.jpg)|*.jpg|JPEG Image File (*.jpeg)|*.jpeg|' +
-      'Bitmaps (*.bmp)|*.bmp|TIFF Images (*.tif)|*.tif|TIFF Images (*.t' +
-      'iff)|*.tiff|Icons (*.ico)|*.ico|Enhanced Metafiles (*.emf)|*.emf' +
-      '|Metafiles (*.wmf)|*.wmf'
     FilterIndex = 0
     Left = 56
     Top = 131
