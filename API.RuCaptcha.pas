@@ -9,20 +9,32 @@ type
   private
     FCaptchaKey: string;
     FHTTPClient: TIdHTTP;
-    function UploadFile(const FileName: string): string;
-    function GetAnswer(const CaptchaId: string): string;
+  protected
+    function SendFormData(AFormData: TIdMultiPartFormDataStream): string;
     function ParseCaptchaId(const Answer: string): string;
     function ParseCaptchaText(const Answer: string): string;
+    function GetAnswer(const CaptchaId: string): string;
     function GetBalance: string;
   public
-    constructor Create;
+    constructor Create; virtual;
     destructor Destroy; override;
-    function Recognize(const FileName: string; out CaptchaId: string): string;
     procedure SendReport(const CaptchaId: string);
-    property Balance: string read GetBalance;
-  published
     property CaptchaKey: string read FCaptchaKey write FCaptchaKey;
+    property Balance: string read GetBalance;
   end;
+
+  TSimpleCaptcha = class(TRuCaptcha)
+  public
+    function Recognize(const FileName: string; out CaptchaId: string): string;
+  end;
+
+  TTextCaptcha = class(TRuCaptcha)
+  public
+    function Recognize(const AText: string; out CaptchaId: string): string;
+  end;
+
+const
+  cInternalTimeout = 2;
 
 implementation
 
@@ -154,14 +166,20 @@ begin
   end;
 end;
 
-function TRuCaptcha.Recognize(const FileName: string; out CaptchaId: string): string;
-begin
-  CaptchaId := UploadFile(FileName);
+function TRuCaptcha.SendFormData(AFormData: TIdMultiPartFormDataStream): string;
+const
+  URL = 'http://rucaptcha.com/in.php';
 
-  repeat
-    Result := GetAnswer(CaptchaId);
-    Wait(2);
-  until Result <> 'CAPCHA_NOT_READY';
+var
+  vContent: TStringStream;
+begin
+  vContent := TStringStream.Create;
+  try
+    FHTTPClient.Post(URL, AFormData, vContent);
+    Result := ParseCaptchaId(vContent.DataString);
+  finally
+    vContent.Free;
+  end;
 end;
 
 procedure TRuCaptcha.SendReport(const CaptchaId: string);
@@ -180,27 +198,48 @@ begin
   end;
 end;
 
-function TRuCaptcha.UploadFile(const FileName: string): string;
-var
-  vURL: string;
-  vFormData: TIdMultiPartFormDataStream;
-  vContent: TStringStream;
-begin
-  vURL := 'http://rucaptcha.com/in.php';
+{ TSimpleCaptcha }
 
+function TSimpleCaptcha.Recognize(const FileName: string;
+  out CaptchaId: string): string;
+var
+  vFormData: TIdMultiPartFormDataStream;
+begin
   vFormData := TIdMultiPartFormDataStream.Create;
   try
     vFormData.AddFormField('soft_id', '838');
-    vFormData.AddFormField('key', FCaptchaKey);
+    vFormData.AddFormField('key', CaptchaKey);
     vFormData.AddFile('file', FileName);
 
-    vContent := TStringStream.Create;
-    try
-      FHTTPClient.Post(vURL, vFormData, vContent);
-      Result := ParseCaptchaId(vContent.DataString);
-    finally
-      vContent.Free;
-    end;
+    CaptchaId := SendFormData(vFormData);
+    repeat
+      Result := GetAnswer(CaptchaId);
+      Wait(cInternalTimeout);
+    until Result <> 'CAPCHA_NOT_READY';
+  finally
+    vFormData.Free;
+  end;
+end;
+
+{ TTextCaptcha }
+
+function TTextCaptcha.Recognize(const AText: string;
+  out CaptchaId: string): string;
+var
+  vFormData: TIdMultiPartFormDataStream;
+begin
+  vFormData := TIdMultiPartFormDataStream.Create;
+  try
+    vFormData.AddFormField('soft_id', '838');
+    vFormData.AddFormField('key', CaptchaKey);
+    vFormData.AddFormField('textcaptcha', AText, 'utf-8').ContentTransfer
+      := '8bit';
+
+    CaptchaId := SendFormData(vFormData);
+    repeat
+      Result := GetAnswer(CaptchaId);
+      Wait(cInternalTimeout);
+    until Result <> 'CAPCHA_NOT_READY';
   finally
     vFormData.Free;
   end;
