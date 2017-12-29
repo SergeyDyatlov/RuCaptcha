@@ -33,8 +33,14 @@ type
     function Recognize(const AText: string; out CaptchaId: string): string;
   end;
 
+  TReCaptchaV2 = class(TRuCaptcha)
+  public
+    function Recognize(const AGoogleKey, APageURL: string;
+      out CaptchaId: string): string;
+  end;
+
 const
-  cInternalTimeout = 2;
+  cInternalTimeout = 5;
 
 implementation
 
@@ -62,6 +68,8 @@ end;
 constructor TRuCaptcha.Create;
 begin
   FHTTPClient := TIdHTTP.Create(nil);
+  FHTTPClient.ReadTimeout := 30000;
+  FHTTPClient.ConnectTimeout := 30000;
 end;
 
 destructor TRuCaptcha.Destroy;
@@ -234,6 +242,31 @@ begin
     vFormData.AddFormField('key', CaptchaKey);
     vFormData.AddFormField('textcaptcha', AText, 'utf-8').ContentTransfer
       := '8bit';
+
+    CaptchaId := SendFormData(vFormData);
+    repeat
+      Result := GetAnswer(CaptchaId);
+      Wait(cInternalTimeout);
+    until Result <> 'CAPCHA_NOT_READY';
+  finally
+    vFormData.Free;
+  end;
+end;
+
+{ TReCaptchaV2 }
+
+function TReCaptchaV2.Recognize(const AGoogleKey, APageURL: string;
+  out CaptchaId: string): string;
+var
+  vFormData: TIdMultiPartFormDataStream;
+begin
+  vFormData := TIdMultiPartFormDataStream.Create;
+  try
+    vFormData.AddFormField('soft_id', '838');
+    vFormData.AddFormField('key', CaptchaKey);
+    vFormData.AddFormField('method', 'userrecaptcha');
+    vFormData.AddFormField('googlekey', AGoogleKey);
+    vFormData.AddFormField('pageurl', APageURL);
 
     CaptchaId := SendFormData(vFormData);
     repeat

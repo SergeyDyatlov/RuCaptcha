@@ -4,8 +4,8 @@ object Form1: TForm1
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Form1'
-  ClientHeight = 487
-  ClientWidth = 378
+  ClientHeight = 765
+  ClientWidth = 408
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -26,7 +26,7 @@ object Form1: TForm1
     Caption = 'RuCaptcha API Key'
   end
   object Label3: TLabel
-    Left = 263
+    Left = 331
     Top = 10
     Width = 50
     Height = 19
@@ -40,10 +40,10 @@ object Form1: TForm1
     ParentFont = False
     OnClick = Label3Click
   end
-  object Edit1: TEdit
+  object edtCaptchaKey: TEdit
     Left = 16
     Top = 35
-    Width = 297
+    Width = 365
     Height = 27
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -54,16 +54,16 @@ object Form1: TForm1
     TabOrder = 0
     Text = '786cc5c7e99f51ac5725d122e95d1e02'
   end
-  object Edit3: TEdit
-    Left = 30
-    Top = 443
+  object edtCaptchaId: TEdit
+    Left = 20
+    Top = 722
     Width = 153
     Height = 27
     TabOrder = 1
   end
   object Button3: TButton
-    Left = 213
-    Top = 438
+    Left = 253
+    Top = 720
     Width = 128
     Height = 32
     Caption = #1055#1086#1078#1072#1083#1086#1074#1072#1090#1100#1089#1103
@@ -73,14 +73,12 @@ object Form1: TForm1
   object PageControl1: TPageControl
     Left = 16
     Top = 78
-    Width = 345
-    Height = 354
-    ActivePage = TabSheet2
+    Width = 377
+    Height = 622
+    ActivePage = TabSheet1
     TabOrder = 3
     object TabSheet1: TTabSheet
       Caption = #1054#1073#1099#1095#1085#1099#1077' '#1082#1072#1087#1095#1080
-      ExplicitWidth = 325
-      ExplicitHeight = 264
       object Label1: TLabel
         Left = 10
         Top = 17
@@ -168,10 +166,78 @@ object Form1: TForm1
         TextHint = #1056#1077#1079#1091#1083#1100#1090#1072#1090
       end
     end
+    object TabSheet3: TTabSheet
+      Caption = 'ReCaptcha'
+      ImageIndex = 2
+      object WebBrowser1: TWebBrowser
+        Left = 0
+        Top = 41
+        Width = 369
+        Height = 506
+        Align = alClient
+        TabOrder = 0
+        ExplicitLeft = 120
+        ExplicitTop = 96
+        ExplicitWidth = 300
+        ExplicitHeight = 150
+        ControlData = {
+          4C000000232600004C3400000000000000000000000000000000000000000000
+          000000004C000000000000000000000001000000E0D057007335CF11AE690800
+          2B2E126208000000000000004C0000000114020000000000C000000000000046
+          8000000000000000000000000000000000000000000000000000000000000000
+          00000000000000000100000000000000000000000000000000000000}
+      end
+      object Panel1: TPanel
+        Left = 0
+        Top = 0
+        Width = 369
+        Height = 41
+        Align = alTop
+        TabOrder = 1
+        object edtURL: TEdit
+          Left = 10
+          Top = 8
+          Width = 283
+          Height = 27
+          TabOrder = 0
+          Text = 'https://www.google.com/recaptcha/api2/demo'
+        end
+        object btnGo: TButton
+          Left = 299
+          Top = 8
+          Width = 50
+          Height = 27
+          Caption = 'Go'
+          TabOrder = 1
+          OnClick = btnGoClick
+        end
+      end
+      object Panel2: TPanel
+        Left = 0
+        Top = 547
+        Width = 369
+        Height = 41
+        Align = alBottom
+        TabOrder = 2
+        object btnRecognizeReCaptcha: TButton
+          Left = 233
+          Top = 6
+          Width = 128
+          Height = 32
+          Caption = #1056#1072#1079#1075#1072#1076#1072#1090#1100
+          TabOrder = 0
+          OnClick = btnRecognizeReCaptchaClick
+        end
+      end
+    end
   end
   object OpenPictureDialog1: TOpenPictureDialog
     FilterIndex = 0
     Left = 328
     Top = 35
+  end
+  object IdAntiFreeze1: TIdAntiFreeze
+    Left = 48
+    Top = 32
   end
 end
