@@ -138,6 +138,10 @@ object Form1: TForm1
     object TabSheet2: TTabSheet
       Caption = #1058#1077#1082#1089#1090#1086#1074#1099#1077' '#1082#1072#1087#1095#1080
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object edtTextCaptcha: TEdit
         Left = 11
         Top = 16
@@ -169,6 +173,10 @@ object Form1: TForm1
     object TabSheet3: TTabSheet
       Caption = 'ReCaptcha'
       ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object WebBrowser1: TWebBrowser
         Left = 0
         Top = 41

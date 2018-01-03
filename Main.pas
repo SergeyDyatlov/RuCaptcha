@@ -64,38 +64,28 @@ implementation
 {$R *.dfm}
 
 uses
-  System.Threading, MSHTML;
+  MSHTML;
 
 procedure TForm1.btnRecognizeReCaptchaClick(Sender: TObject);
 var
   GoogleKey: string;
   CaptchaText: string;
   CaptchaId: string;
+  Element: IDispatch;
 begin
-  TTask.Run(
-    procedure
-    begin
-      TThread.Synchronize(nil,
-        procedure
-        var
-          Element: IDispatch;
-        begin
-          Element := GetElementById(WebBrowser1.Document, 'recaptcha-demo');
-          GoogleKey := (Element as IHTMLElement)
-            .getAttribute('data-sitekey', 0);
+  Element := GetElementById(WebBrowser1.Document, 'recaptcha-demo');
+  GoogleKey := (Element as IHTMLElement).getAttribute('data-sitekey', 0);
 
-          ReCaptcha.CaptchaKey := edtCaptchaKey.Text;
-          CaptchaText := ReCaptcha.Recognize(GoogleKey, WebBrowser1.LocationURL,
-            CaptchaId);
+  ReCaptcha.CaptchaKey := edtCaptchaKey.Text;
+  CaptchaText := ReCaptcha.Recognize(GoogleKey, WebBrowser1.LocationURL,
+    CaptchaId);
 
-          Element := GetElementById(WebBrowser1.Document,
-            'g-recaptcha-response');
-          (Element as IHTMLTextAreaElement).Value := CaptchaText;
-          Element := GetElementById(WebBrowser1.Document,
-            'recaptcha-demo-submit');
-          (Element as IHTMLElement).click;
-        end);
-    end);
+  Element := GetElementById(WebBrowser1.Document, 'g-recaptcha-response');
+  (Element as IHTMLTextAreaElement).Value := CaptchaText;
+  Application.ProcessMessages;
+
+  Element := GetElementById(WebBrowser1.Document, 'recaptcha-demo-submit');
+  (Element as IHTMLElement).click;
 end;
 
 procedure TForm1.btnRecognizeTextCaptchaClick(Sender: TObject);
