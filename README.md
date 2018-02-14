@@ -10,6 +10,7 @@
 - Запрос баланса.
 
 ## Пример кода для простой капчи!
+```pascal
 SimpleCaptcha := TSimpleCaptcha.Create;
 try
   SimpleCaptcha.CaptchaKey := 'Ваш API ключ';
@@ -22,8 +23,10 @@ try
 finally
   SimpleCaptcha.Free;
 end;
+```
 
 ## Пример кода для текстовой капчи!
+```pascal
 TextCaptcha := TTextCaptcha.Create;
 try
   TextCaptcha.CaptchaKey := 'Ваш API ключ';
@@ -31,5 +34,4 @@ try
 finally
   TextCaptcha.Free;
 end;
-
-
+```
