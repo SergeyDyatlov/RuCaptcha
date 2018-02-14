@@ -35,3 +35,17 @@ finally
   TextCaptcha.Free;
 end;
 ```
+
+## Пример кода для ReCaptcha!
+```pascal
+ReCaptcha := TReCaptchaV2.Create;
+try
+  ReCaptcha.CaptchaKey := edtCaptchaKey.Text;
+  Result := ReCaptcha.Recognize(GoogleKey, WebBrowser1.LocationURL, CaptchaId);
+finally
+  ReCaptcha.Free;
+end;
+```
+#### Внимание! Пример для ReCaptchaV2 немного усложнен, потому что нужно получить GoogleKey
+Как найти GoogleKey описано тут https://rucaptcha.com/api-rucaptcha#solving_recaptchav2_new
+В примере есть готовый вариант поиска GoogleKey и ввода полученной капчи в проверочное поле ввода
