@@ -11,43 +11,30 @@
 
 ## Пример кода для простой капчи!
 ```pascal
-SimpleCaptcha := TSimpleCaptcha.Create;
-try
-  SimpleCaptcha.CaptchaKey := 'Ваш API ключ';
-  Result := SimpleCaptcha.Recognize('Имя файла', CaptchaId);
+SimpleCaptcha.CaptchaKey := 'Ваш API ключ';
+Result := SimpleCaptcha.Recognize('Имя файла', CaptchaId);
   
-  // Вводим полученный результат в поле ввода
-  // Если что то пошло не так, отправляем отчет о неверно разгаданной капче
-  // Аналогично для всех видов капч
-  SimpleCaptcha.SendReport(CaptchaId);
-finally
-  SimpleCaptcha.Free;
-end;
+// Если что то пошло не так, отправляем отчет о неверно разгаданной капче
+// Аналогично для всех видов капч
+SimpleCaptcha.SendReport(CaptchaId);
 ```
 
 ## Пример кода для текстовой капчи!
 ```pascal
-TextCaptcha := TTextCaptcha.Create;
-try
-  TextCaptcha.CaptchaKey := 'Ваш API ключ';
-  Result := TextCaptcha.Recognize('Текст капчи', CaptchaId);
-finally
-  TextCaptcha.Free;
-end;
+TextCaptcha.CaptchaKey := 'Ваш API ключ';
+Result := TextCaptcha.Recognize('Текст капчи', CaptchaId);
 ```
 
 ## Пример кода для ReCaptcha!
 ```pascal
-ReCaptcha := TReCaptchaV2.Create;
-try
-  ReCaptcha.CaptchaKey := edtCaptchaKey.Text;
-  Result := ReCaptcha.Recognize(GoogleKey, WebBrowser1.LocationURL, CaptchaId);
-finally
-  ReCaptcha.Free;
-end;
+ReCaptchaV2.CaptchaKey := 'Ваш API ключ';
+Result := ReCaptchaV2.Recognize(GoogleKey, WebBrowser1.LocationURL, CaptchaId);
 ```
 #### Внимание! Пример для ReCaptchaV2 немного усложнен, потому что нужно получить GoogleKey
 Как найти GoogleKey описано тут https://rucaptcha.com/api-rucaptcha#solving_recaptchav2_new
 В примере есть готовый вариант поиска GoogleKey и ввода полученной капчи в проверочное поле ввода
+
+Вы можете создавать объекты сами, вместо использования глобальных 
+переменных SimpleCaptcha, TextCaptcha, ReCaptchaV2.
 
 #### По вопросам при предложениям можно обращаться в группе телеграм https://t.me/joinchat/CFH6xA8ihVkx0tHaNaT08g
