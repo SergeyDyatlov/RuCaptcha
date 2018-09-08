@@ -2,9 +2,11 @@ unit API.RuCaptcha;
 
 interface
 
-uses IdHTTP, IdMultipartFormData;
+uses IdHTTP, IdMultipartFormData, System.SysUtils;
 
 type
+  ERuCaptchaError = class(Exception);
+
   TRuCaptcha = class
   private
     FCaptchaKey: string;
@@ -42,10 +44,15 @@ type
 const
   cInternalTimeout = 5;
 
+var
+  SimpleCaptcha: TSimpleCaptcha;
+  TextCaptcha: TTextCaptcha;
+  ReCaptchaV2: TReCaptchaV2;
+
 implementation
 
-uses System.Classes, StrUtils, System.SysUtils, Vcl.Forms,
-  System.Generics.Collections, DateUtils;
+uses System.Classes, StrUtils, Vcl.Forms, System.Generics.Collections,
+  DateUtils;
 
 procedure Wait(Seconds: Int64);
 var
@@ -138,7 +145,7 @@ begin
       'IP-адрес, с которого пришЄл запрос заблокирован из-за частых обращений с различными неверными ключами. Ѕлокировка снимаетс€ через час');
 
     if vErrors.ContainsKey(Answer) then
-      raise Exception.CreateFmt('RuCaptcha: %s', [vErrors[Answer]]);
+      raise ERuCaptchaError.CreateFmt('RuCaptcha: %s', [vErrors[Answer]]);
 
     Result := ReplaceStr(Answer, 'OK|', '');
   finally
@@ -166,7 +173,7 @@ begin
       '“акой ответ сервер может отдать на жалобу (reportbad), если до этого вы пожаловались на большое количество верных распознаний');
 
     if vErrors.ContainsKey(Answer) then
-      raise Exception.CreateFmt('RuCaptcha: %s', [vErrors[Answer]]);
+      raise ERuCaptchaError.CreateFmt('RuCaptcha: %s', [vErrors[Answer]]);
 
     Result := ReplaceStr(Answer, 'OK|', '');
   finally
@@ -277,5 +284,17 @@ begin
     vFormData.Free;
   end;
 end;
+
+initialization
+
+SimpleCaptcha := TSimpleCaptcha.Create;
+TextCaptcha := TTextCaptcha.Create;
+ReCaptchaV2 := TReCaptchaV2.Create;
+
+finalization
+
+SimpleCaptcha.Free;
+TextCaptcha.Free;
+ReCaptchaV2.Free;
 
 end.

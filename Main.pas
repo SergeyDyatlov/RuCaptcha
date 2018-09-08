@@ -3,10 +3,10 @@ unit Main;
 interface
 
 uses
-  API.RuCaptcha, Winapi.Windows, Winapi.Messages, System.SysUtils,
-  System.Variants, System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms,
-  Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.ExtDlgs, JPEG, Vcl.ComCtrls,
-  Vcl.OleCtrls, SHDocVw, IdBaseComponent, IdAntiFreezeBase, IdAntiFreeze;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
+  Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.ExtDlgs, JPEG, Vcl.ComCtrls, Vcl.OleCtrls,
+  SHDocVw, IdBaseComponent, IdAntiFreezeBase, IdAntiFreeze;
 
 type
   TForm1 = class(TForm)
@@ -20,7 +20,7 @@ type
     Label1: TLabel;
     Image1: TImage;
     Button1: TButton;
-    Button2: TButton;
+    btnRecognizeSimpleCaptcha: TButton;
     Edit2: TEdit;
     OpenPictureDialog1: TOpenPictureDialog;
     TabSheet2: TTabSheet;
@@ -36,20 +36,15 @@ type
     btnRecognizeReCaptcha: TButton;
     IdAntiFreeze1: TIdAntiFreeze;
     procedure Button1Click(Sender: TObject);
-    procedure Button2Click(Sender: TObject);
+    procedure btnRecognizeSimpleCaptchaClick(Sender: TObject);
     procedure Label3Click(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
     procedure Button3Click(Sender: TObject);
     procedure btnRecognizeTextCaptchaClick(Sender: TObject);
     procedure btnGoClick(Sender: TObject);
     procedure btnRecognizeReCaptchaClick(Sender: TObject);
   private
     { Private declarations }
-    FileName: string;
-    SimpleCaptcha: TSimpleCaptcha;
-    TextCaptcha: TTextCaptcha;
-    ReCaptcha: TReCaptchaV2;
+    FFileName: string;
   public
     { Public declarations }
     function GetElementById(const Document: IDispatch; ElementId: string)
@@ -64,7 +59,7 @@ implementation
 {$R *.dfm}
 
 uses
-  MSHTML;
+  API.RuCaptcha, MSHTML;
 
 procedure TForm1.btnRecognizeReCaptchaClick(Sender: TObject);
 var
@@ -76,8 +71,8 @@ begin
   Element := GetElementById(WebBrowser1.Document, 'recaptcha-demo');
   GoogleKey := (Element as IHTMLElement).getAttribute('data-sitekey', 0);
 
-  ReCaptcha.CaptchaKey := edtCaptchaKey.Text;
-  CaptchaText := ReCaptcha.Recognize(GoogleKey, WebBrowser1.LocationURL,
+  ReCaptchaV2.CaptchaKey := edtCaptchaKey.Text;
+  CaptchaText := ReCaptchaV2.Recognize(GoogleKey, WebBrowser1.LocationURL,
     CaptchaId);
 
   Element := GetElementById(WebBrowser1.Document, 'g-recaptcha-response');
@@ -102,17 +97,17 @@ procedure TForm1.Button1Click(Sender: TObject);
 begin
   if OpenPictureDialog1.Execute then
   begin
-    FileName := OpenPictureDialog1.FileName;
-    Image1.Picture.LoadFromFile(FileName);
+    FFileName := OpenPictureDialog1.FileName;
+    Image1.Picture.LoadFromFile(FFileName);
   end;
 end;
 
-procedure TForm1.Button2Click(Sender: TObject);
+procedure TForm1.btnRecognizeSimpleCaptchaClick(Sender: TObject);
 var
   CaptchaId: string;
 begin
   SimpleCaptcha.CaptchaKey := edtCaptchaKey.Text;
-  Edit2.Text := SimpleCaptcha.Recognize(FileName, CaptchaId);
+  Edit2.Text := SimpleCaptcha.Recognize(FFileName, CaptchaId);
   edtCaptchaId.Text := CaptchaId;
 end;
 
@@ -124,20 +119,6 @@ end;
 procedure TForm1.btnGoClick(Sender: TObject);
 begin
   WebBrowser1.Navigate(edtURL.Text);
-end;
-
-procedure TForm1.FormCreate(Sender: TObject);
-begin
-  SimpleCaptcha := TSimpleCaptcha.Create;
-  TextCaptcha := TTextCaptcha.Create;
-  ReCaptcha := TReCaptchaV2.Create;
-end;
-
-procedure TForm1.FormDestroy(Sender: TObject);
-begin
-  ReCaptcha.Free;
-  TextCaptcha.Free;
-  SimpleCaptcha.Free;
 end;
 
 function TForm1.GetElementById(const Document: IDispatch; ElementId: string)
