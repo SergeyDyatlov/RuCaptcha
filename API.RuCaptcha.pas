@@ -13,8 +13,7 @@ type
     FHTTPClient: TIdHTTP;
   protected
     function SendFormData(AFormData: TIdMultiPartFormDataStream): string;
-    function ParseCaptchaId(const Answer: string): string;
-    function ParseCaptchaText(const Answer: string): string;
+    function ParseResponse(const Response: string): string;
     function GetAnswer(const CaptchaId: string): string;
     function GetBalance: string;
   public
@@ -96,7 +95,7 @@ begin
   vContent := TStringStream.Create;
   try
     FHTTPClient.Get(vURL, vContent);
-    Result := ParseCaptchaText(vContent.DataString);
+    Result := ParseResponse(vContent.DataString);
     Result := UTF8Decode(Result);
   finally
     vContent.Free;
@@ -120,65 +119,15 @@ begin
   end;
 end;
 
-function TRuCaptcha.ParseCaptchaId(const Answer: string): string;
-var
-  vErrors: TDictionary<string, string>;
+function TRuCaptcha.ParseResponse(const Response: string): string;
 begin
-  vErrors := TDictionary<string, string>.Create;
-  try
-    vErrors.Add('ERROR_WRONG_USER_KEY',
-      'Не верный формат параметра key, должно быть 32 символа');
-    vErrors.Add('ERROR_KEY_DOES_NOT_EXIST', 'Использован несуществующий key');
-    vErrors.Add('ERROR_ZERO_BALANCE', 'Баланс Вашего аккаунта нулевой');
-    vErrors.Add('ERROR_NO_SLOT_AVAILABLE',
-      'Текущая ставка распознования выше, чем максимально установленная в настройках Вашего аккаунта. Либо на сервере скопилась очередь и работники не успевают её разобрать, повторите загрузку через 5 секунд.');
-    vErrors.Add('ERROR_ZERO_CAPTCHA_FILESIZE', 'Размер капчи меньше 100 Байт');
-    vErrors.Add('ERROR_TOO_BIG_CAPTCHA_FILESIZE',
-      'Размер капчи более 100 КБайт');
-    vErrors.Add('ERROR_WRONG_FILE_EXTENSION',
-      'Ваша капча имеет неверное расширение, допустимые расширения jpg,jpeg,gif,png');
-    vErrors.Add('ERROR_IMAGE_TYPE_NOT_SUPPORTED',
-      'Сервер не может определить тип файла капчи');
-    vErrors.Add('ERROR_IP_NOT_ALLOWED',
-      'В Вашем аккаунте настроено ограничения по IP с которых можно делать запросы. И IP, с которого пришёл данный запрос не входит в список разрешённых.');
-    vErrors.Add('IP_BANNED',
-      'IP-адрес, с которого пришёл запрос заблокирован из-за частых обращений с различными неверными ключами. Блокировка снимается через час');
+  if AnsiSameText('CAPCHA_NOT_READY', Response) then
+    Exit(Response);
 
-    if vErrors.ContainsKey(Answer) then
-      raise ERuCaptchaError.CreateFmt('RuCaptcha: %s', [vErrors[Answer]]);
+  if AnsiPos('OK|', Response) <= 0 then
+    raise ERuCaptchaError.Create(Response);
 
-    Result := ReplaceStr(Answer, 'OK|', '');
-  finally
-    vErrors.Free;
-  end;
-end;
-
-function TRuCaptcha.ParseCaptchaText(const Answer: string): string;
-var
-  vErrors: TDictionary<string, string>;
-begin
-  vErrors := TDictionary<string, string>.Create;
-  try
-    vErrors.Add('ERROR_KEY_DOES_NOT_EXIST',
-      'Вы использовали неверный key в запросе');
-    vErrors.Add('ERROR_WRONG_ID_FORMAT',
-      'Неверный формат ID капчи. ID должен содержать только цифры');
-    vErrors.Add('ERROR_CAPTCHA_UNSOLVABLE',
-      'Капчу не смогли разгадать 3 разных работника. Списанные средства за это изображение возвращаются обратно на баланс');
-    vErrors.Add('ERROR_WRONG_CAPTCHA_ID',
-      'Вы пытаетесь получить ответ на капчу или пожаловаться на капчу, которая была загружена более 15 минут назад');
-    vErrors.Add('ERROR_BAD_DUPLICATES',
-      'Ошибка появляется при включённом 100%м распознании. Было использовано максимальное количество попыток, но необходимое количество одинаковых ответов не было набрано');
-    vErrors.Add('REPORT_NOT_RECORDED',
-      'Такой ответ сервер может отдать на жалобу (reportbad), если до этого вы пожаловались на большое количество верных распознаний');
-
-    if vErrors.ContainsKey(Answer) then
-      raise ERuCaptchaError.CreateFmt('RuCaptcha: %s', [vErrors[Answer]]);
-
-    Result := ReplaceStr(Answer, 'OK|', '');
-  finally
-    vErrors.Free;
-  end;
+  Result := ReplaceText(Response, 'OK|', '');
 end;
 
 function TRuCaptcha.SendFormData(AFormData: TIdMultiPartFormDataStream): string;
@@ -191,7 +140,7 @@ begin
   vContent := TStringStream.Create;
   try
     FHTTPClient.Post(URL, AFormData, vContent);
-    Result := ParseCaptchaId(vContent.DataString);
+    Result := ParseResponse(vContent.DataString);
   finally
     vContent.Free;
   end;
