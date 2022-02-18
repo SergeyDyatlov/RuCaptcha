@@ -1,30 +1,30 @@
-object Form1: TForm1
+object MainForm: TMainForm
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
-  Caption = 'Form1'
-  ClientHeight = 765
+  Caption = 'MainForm'
+  ClientHeight = 658
   ClientWidth = 408
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -16
+  Font.Height = -15
   Font.Name = 'Tahoma'
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
   PixelsPerInch = 96
-  TextHeight = 19
+  TextHeight = 18
   object Label2: TLabel
     Left = 16
     Top = 10
-    Width = 136
-    Height = 19
+    Width = 128
+    Height = 18
     Caption = 'RuCaptcha API Key'
   end
-  object Label3: TLabel
-    Left = 331
+  object lblShowBalance: TLabel
+    Left = 339
     Top = 10
     Width = 50
     Height = 19
@@ -36,12 +36,12 @@ object Form1: TForm1
     Font.Name = 'Tahoma'
     Font.Style = [fsUnderline]
     ParentFont = False
-    OnClick = Label3Click
+    OnClick = lblShowBalanceClick
   end
   object edtCaptchaKey: TEdit
     Left = 16
     Top = 35
-    Width = 365
+    Width = 373
     Height = 27
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -53,26 +53,26 @@ object Form1: TForm1
     Text = '786cc5c7e99f51ac5725d122e95d1e02'
   end
   object edtCaptchaId: TEdit
-    Left = 20
-    Top = 722
+    Left = 16
+    Top = 605
     Width = 153
-    Height = 27
+    Height = 26
     TabOrder = 1
   end
-  object Button3: TButton
-    Left = 253
-    Top = 720
-    Width = 128
+  object btnSendReport: TButton
+    Left = 257
+    Top = 602
+    Width = 136
     Height = 32
     Caption = #1055#1086#1078#1072#1083#1086#1074#1072#1090#1100#1089#1103
     TabOrder = 2
-    OnClick = Button3Click
+    OnClick = btnSendReportClick
   end
   object PageControl1: TPageControl
     Left = 16
     Top = 78
     Width = 377
-    Height = 622
+    Height = 518
     ActivePage = TabSheet1
     TabOrder = 3
     object TabSheet1: TTabSheet
@@ -93,7 +93,7 @@ object Form1: TForm1
       object Image1: TImage
         Left = 10
         Top = 56
-        Width = 311
+        Width = 351
         Height = 209
         Center = True
         Proportional = True
@@ -106,27 +106,27 @@ object Form1: TForm1
         Caption = #1054#1073#1079#1086#1088
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
-        Font.Height = -16
+        Font.Height = -15
         Font.Name = 'Tahoma'
         Font.Style = []
         ParentFont = False
         TabOrder = 0
         OnClick = Button1Click
       end
-      object btnRecognizeSimpleCaptcha: TButton
-        Left = 194
-        Top = 279
+      object btnSolveSimpleCaptcha: TButton
+        Left = 233
+        Top = 278
         Width = 128
         Height = 32
         Caption = #1056#1072#1079#1075#1072#1076#1072#1090#1100
         TabOrder = 1
-        OnClick = btnRecognizeSimpleCaptchaClick
+        OnClick = btnSolveSimpleCaptchaClick
       end
-      object Edit2: TEdit
+      object edtCaptchaResult: TEdit
         Left = 10
         Top = 281
-        Width = 167
-        Height = 27
+        Width = 207
+        Height = 26
         ParentShowHint = False
         ShowHint = True
         TabOrder = 2
@@ -139,25 +139,25 @@ object Form1: TForm1
       object edtTextCaptcha: TEdit
         Left = 11
         Top = 16
-        Width = 310
-        Height = 27
+        Width = 350
+        Height = 26
         TabOrder = 0
         Text = #1045#1089#1083#1080' '#1079#1072#1074#1090#1088#1072' '#1089#1091#1073#1073#1086#1090#1072', '#1090#1086' '#1082#1072#1082#1086#1081' '#1089#1077#1075#1086#1076#1085#1103' '#1076#1077#1085#1100'?'
       end
-      object btnRecognizeTextCaptcha: TButton
-        Left = 193
-        Top = 56
+      object btnSolveTextCaptcha: TButton
+        Left = 233
+        Top = 55
         Width = 128
         Height = 32
         Caption = #1056#1072#1079#1075#1072#1076#1072#1090#1100
         TabOrder = 1
-        OnClick = btnRecognizeTextCaptchaClick
+        OnClick = btnSolveTextCaptchaClick
       end
       object edtTextCaptchaResult: TEdit
         Left = 11
         Top = 58
-        Width = 166
-        Height = 27
+        Width = 206
+        Height = 26
         ParentShowHint = False
         ShowHint = True
         TabOrder = 2
@@ -165,13 +165,13 @@ object Form1: TForm1
       end
     end
     object TabSheet3: TTabSheet
-      Caption = 'ReCaptcha'
+      Caption = 'ReCaptchaV2'
       ImageIndex = 2
       object WebBrowser1: TWebBrowser
         Left = 0
         Top = 41
         Width = 369
-        Height = 506
+        Height = 403
         Align = alClient
         TabOrder = 0
         ExplicitLeft = 120
@@ -179,7 +179,7 @@ object Form1: TForm1
         ExplicitWidth = 300
         ExplicitHeight = 150
         ControlData = {
-          4C000000232600004C3400000000000000000000000000000000000000000000
+          4C00000023260000A72900000000000000000000000000000000000000000000
           000000004C000000000000000000000001000000E0D057007335CF11AE690800
           2B2E126208000000000000004C0000000114020000000000C000000000000046
           8000000000000000000000000000000000000000000000000000000000000000
@@ -196,7 +196,7 @@ object Form1: TForm1
           Left = 10
           Top = 8
           Width = 283
-          Height = 27
+          Height = 26
           TabOrder = 0
           Text = 'https://www.google.com/recaptcha/api2/demo'
         end
@@ -212,19 +212,20 @@ object Form1: TForm1
       end
       object Panel2: TPanel
         Left = 0
-        Top = 547
+        Top = 444
         Width = 369
         Height = 41
         Align = alBottom
         TabOrder = 2
-        object btnRecognizeReCaptcha: TButton
+        ExplicitTop = 547
+        object btnSolveReCaptchaV2: TButton
           Left = 233
-          Top = 6
+          Top = -2
           Width = 128
           Height = 32
           Caption = #1056#1072#1079#1075#1072#1076#1072#1090#1100
           TabOrder = 0
-          OnClick = btnRecognizeReCaptchaClick
+          OnClick = btnSolveReCaptchaV2Click
         end
       end
     end
