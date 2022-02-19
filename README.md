@@ -13,7 +13,7 @@
 ```pascal
 Captcha := TSimpleCaptcha.Create(FileName);
 try
-  FRuCaptcha.CaptchaKey := 'Ваш API ключ';
+  FRuCaptcha.APIKey := 'Ваш API ключ';
   FRuCaptcha.SolveCaptcha(Captcha);
   Result := Captcha.Answer;
 finally
@@ -29,7 +29,7 @@ SimpleCaptcha.SendReport(CaptchaId);
 ```pascal
 Captcha := TTextCaptcha.Create('Текст капчи');
 try
-  FRuCaptcha.CaptchaKey := 'Ваш API ключ';
+  FRuCaptcha.APIKey := 'Ваш API ключ';
   FRuCaptcha.SolveCaptcha(Captcha);
   Result := Captcha.Answer;
 finally
@@ -41,7 +41,7 @@ end;
 ```pascal
 Captcha := TReCaptcha.Create(GoogleKey, PageURL);
 try
-  FRuCaptcha.CaptchaKey := 'Ваш API ключ';
+  FRuCaptcha.APIKey := 'Ваш API ключ';
   FRuCaptcha.SolveCaptcha(Captcha);
   Result := Captcha.Answer;
 finally
