@@ -14,6 +14,8 @@ object MainForm: TMainForm
   Font.Style = []
   OldCreateOrder = False
   Position = poScreenCenter
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
   PixelsPerInch = 96
   TextHeight = 18
   object Label2: TLabel
@@ -38,7 +40,7 @@ object MainForm: TMainForm
     ParentFont = False
     OnClick = lblShowBalanceClick
   end
-  object edtCaptchaKey: TEdit
+  object edtAPIKey: TEdit
     Left = 16
     Top = 35
     Width = 373
@@ -217,7 +219,6 @@ object MainForm: TMainForm
         Height = 41
         Align = alBottom
         TabOrder = 2
-        ExplicitTop = 547
         object btnSolveReCaptchaV2: TButton
           Left = 233
           Top = -2

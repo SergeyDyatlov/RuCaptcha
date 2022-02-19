@@ -6,11 +6,11 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.ExtDlgs, JPEG, Vcl.ComCtrls, Vcl.OleCtrls,
-  SHDocVw, IdBaseComponent, IdAntiFreezeBase, IdAntiFreeze;
+  SHDocVw, IdBaseComponent, IdAntiFreezeBase, IdAntiFreeze, RuCaptcha;
 
 type
   TMainForm = class(TForm)
-    edtCaptchaKey: TEdit;
+    edtAPIKey: TEdit;
     Label2: TLabel;
     lblShowBalance: TLabel;
     edtCaptchaId: TEdit;
@@ -42,8 +42,11 @@ type
     procedure btnSolveTextCaptchaClick(Sender: TObject);
     procedure btnGoClick(Sender: TObject);
     procedure btnSolveReCaptchaV2Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
   private
     { Private declarations }
+    FRuCaptcha: TRuCaptcha;
     FFileName: string;
   public
     { Public declarations }
@@ -59,39 +62,46 @@ implementation
 {$R *.dfm}
 
 uses
-  RuCaptcha, MSHTML, System.Threading;
+  SimpleCaptcha, TextCaptcha, ReCaptcha, MSHTML, System.Threading;
 
 procedure TMainForm.btnSolveReCaptchaV2Click(Sender: TObject);
 var
   GoogleKey: string;
   CaptchaResult: string;
   Element: IDispatch;
+  PageURL: string;
 begin
   btnSolveReCaptchaV2.Enabled := False;
   Element := GetElementById(WebBrowser1.Document, 'recaptcha-demo');
   GoogleKey := (Element as IHTMLElement).getAttribute('data-sitekey', 0);
-  ReCaptchaV2.CaptchaKey := edtCaptchaKey.Text;
+  PageURL := WebBrowser1.LocationURL;
+  FRuCaptcha.APIKey := edtAPIKey.Text;
 
   TTask.Run(
     procedure
     var
-      CaptchaResult: string;
+      Captcha: TReCaptcha;
     begin
+      Captcha := TReCaptcha.Create(GoogleKey, PageURL);
       try
-        CaptchaResult := ReCaptchaV2.Solve(GoogleKey, WebBrowser1.LocationURL);
+        FRuCaptcha.SolveCaptcha(Captcha);
       finally
         TThread.Synchronize(TThread.Current,
           procedure
           begin
             Element := GetElementById(WebBrowser1.Document,
               'g-recaptcha-response');
-            (Element as IHTMLTextAreaElement).Value := CaptchaResult;
+            (Element as IHTMLTextAreaElement).Value := Captcha.Answer;
 
             Element := GetElementById(WebBrowser1.Document,
               'recaptcha-demo-submit');
             (Element as IHTMLElement).click;
+
+            edtCaptchaId.Text := Captcha.Id;
             btnSolveReCaptchaV2.Enabled := True;
           end);
+
+        Captcha.Free;
       end;
     end);
 end;
@@ -99,23 +109,27 @@ end;
 procedure TMainForm.btnSolveTextCaptchaClick(Sender: TObject);
 begin
   btnSolveTextCaptcha.Enabled := False;
-  TextCaptcha.CaptchaKey := edtCaptchaKey.Text;
+  FRuCaptcha.APIKey := edtAPIKey.Text;
 
   TTask.Run(
     procedure
     var
-      CaptchaResult: string;
+      Captcha: TTextCaptcha;
     begin
+      Captcha := TTextCaptcha.Create(edtTextCaptcha.Text);
       try
-        CaptchaResult := TextCaptcha.Solve(edtTextCaptcha.Text);
+        Captcha.Lang := 'ru';
+        FRuCaptcha.SolveCaptcha(Captcha);
       finally
         TThread.Synchronize(TThread.Current,
           procedure
           begin
-            edtTextCaptchaResult.Text := CaptchaResult;
-            edtCaptchaId.Text := TextCaptcha.CaptchaId;
+            edtTextCaptchaResult.Text := Captcha.Answer;
+            edtCaptchaId.Text := Captcha.Id;
             btnSolveTextCaptcha.Enabled := True;
           end);
+
+        Captcha.Free;
       end;
     end);
 end;
@@ -129,33 +143,57 @@ begin
   end;
 end;
 
+procedure TMainForm.FormCreate(Sender: TObject);
+begin
+  FRuCaptcha := TRuCaptcha.Create;
+end;
+
+procedure TMainForm.FormDestroy(Sender: TObject);
+begin
+  FRuCaptcha.Free;
+end;
+
 procedure TMainForm.btnSolveSimpleCaptchaClick(Sender: TObject);
 begin
   btnSolveSimpleCaptcha.Enabled := False;
-  SimpleCaptcha.CaptchaKey := edtCaptchaKey.Text;
+  FRuCaptcha.APIKey := edtAPIKey.Text;
 
   TTask.Run(
     procedure
     var
-      CaptchaResult: string;
+      Captcha: TSimpleCaptcha;
     begin
+      Captcha := TSimpleCaptcha.Create(FFileName);
       try
-        CaptchaResult := SimpleCaptcha.Solve(FFileName);
+        try
+          FRuCaptcha.SolveCaptcha(Captcha);
+        except
+          on E: Exception do
+          begin
+            TThread.Synchronize(TThread.Current,
+              procedure
+              begin
+                Application.ShowException(E);
+              end);
+          end;
+        end;
       finally
         TThread.Synchronize(TThread.Current,
           procedure
           begin
-            edtCaptchaResult.Text := CaptchaResult;
-            edtCaptchaId.Text := SimpleCaptcha.CaptchaId;
+            edtCaptchaResult.Text := Captcha.Answer;
+            edtCaptchaId.Text := Captcha.Id;
             btnSolveSimpleCaptcha.Enabled := True;
           end);
+
+        Captcha.Free;
       end;
     end);
 end;
 
 procedure TMainForm.btnSendReportClick(Sender: TObject);
 begin
-  SimpleCaptcha.SendReport(edtCaptchaId.Text);
+  FRuCaptcha.SendReport(edtCaptchaId.Text);
 end;
 
 procedure TMainForm.btnGoClick(Sender: TObject);
@@ -171,8 +209,8 @@ end;
 
 procedure TMainForm.lblShowBalanceClick(Sender: TObject);
 begin
-  SimpleCaptcha.CaptchaKey := edtCaptchaKey.Text;
-  ShowMessage(SimpleCaptcha.Balance);
+  FRuCaptcha.APIKey := edtAPIKey.Text;
+  ShowMessage(FRuCaptcha.Balance);
 end;
 
 end.
