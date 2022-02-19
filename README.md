@@ -11,8 +11,14 @@
 
 ## Пример кода для простой капчи!
 ```pascal
-SimpleCaptcha.CaptchaKey := 'Ваш API ключ';
-Result := SimpleCaptcha.Recognize('Имя файла', CaptchaId);
+Captcha := TSimpleCaptcha.Create(FileName);
+try
+  FRuCaptcha.CaptchaKey := 'Ваш API ключ';
+  FRuCaptcha.SolveCaptcha(Captcha);
+  Result := Captcha.Answer;
+finally
+  Captcha.Free;
+end;
   
 // Если что то пошло не так, отправляем отчет о неверно разгаданной капче
 // Аналогично для всех видов капч
@@ -21,20 +27,29 @@ SimpleCaptcha.SendReport(CaptchaId);
 
 ## Пример кода для текстовой капчи!
 ```pascal
-TextCaptcha.CaptchaKey := 'Ваш API ключ';
-Result := TextCaptcha.Recognize('Текст капчи', CaptchaId);
+Captcha := TTextCaptcha.Create('Текст капчи');
+try
+  FRuCaptcha.CaptchaKey := 'Ваш API ключ';
+  FRuCaptcha.SolveCaptcha(Captcha);
+  Result := Captcha.Answer;
+finally
+  Captcha.Free;
+end;
 ```
 
 ## Пример кода для ReCaptcha!
 ```pascal
-ReCaptchaV2.CaptchaKey := 'Ваш API ключ';
-Result := ReCaptchaV2.Recognize(GoogleKey, WebBrowser1.LocationURL, CaptchaId);
+Captcha := TReCaptcha.Create(GoogleKey, PageURL);
+try
+  FRuCaptcha.CaptchaKey := 'Ваш API ключ';
+  FRuCaptcha.SolveCaptcha(Captcha);
+  Result := Captcha.Answer;
+finally
+  Captcha.Free;
+end;
 ```
 #### Внимание! Пример для ReCaptchaV2 немного усложнен, потому что нужно получить GoogleKey
 Как найти GoogleKey описано тут https://rucaptcha.com/api-rucaptcha#solving_recaptchav2_new
 В примере есть готовый вариант поиска GoogleKey и ввода полученной капчи в проверочное поле ввода
-
-Вы можете создавать объекты сами, вместо использования глобальных 
-переменных SimpleCaptcha, TextCaptcha, ReCaptchaV2.
 
 #### По вопросам при предложениям можно обращаться в группе телеграм https://t.me/joinchat/CFH6xA8ihVkx0tHaNaT08g
