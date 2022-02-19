@@ -14,6 +14,7 @@ type
     FHTTPClient: TIdHTTP;
     FAPIKey: string;
     FRequestTimeout: Integer;
+    FHost: string;
   protected
     function GetBalance: string;
     function SendFormData(AFormData: TIdMultiPartFormDataStream): string;
@@ -29,6 +30,7 @@ type
   published
     property APIKey: string read FAPIKey write FAPIKey;
     property RequestTimeout: Integer read FRequestTimeout write FRequestTimeout;
+    property Host: string read FHost write FHost;
   end;
 
 {$M-}
@@ -46,6 +48,7 @@ begin
   FHTTPClient.ConnectTimeout := 30000;
 
   FRequestTimeout := 5000;
+  FHost := 'rucaptcha.com';
 end;
 
 destructor TRuCaptcha.Destroy;
@@ -59,8 +62,8 @@ var
   URL: string;
   Content: TStringStream;
 begin
-  URL := Format('http://rucaptcha.com/res.php?key=%s&action=get&id=%s',
-    [FAPIKey, CaptchaId]);
+  URL := Format('http://%s/res.php?key=%s&action=get&id=%s',
+    [FHost, FAPIKey, CaptchaId]);
 
   Content := TStringStream.Create('', TEncoding.UTF8);
   try
@@ -76,8 +79,7 @@ var
   URL: string;
   Content: TStringStream;
 begin
-  URL := Format('http://rucaptcha.com/res.php?key=%s&action=getbalance',
-    [FAPIKey]);
+  URL := Format('http://%s/res.php?key=%s&action=getbalance', [FHost, FAPIKey]);
 
   Content := TStringStream.Create;
   try
@@ -100,12 +102,12 @@ begin
 end;
 
 function TRuCaptcha.SendFormData(AFormData: TIdMultiPartFormDataStream): string;
-const
-  URL = 'http://rucaptcha.com/in.php';
-
 var
+  URL: string;
   Content: TStringStream;
 begin
+  URL := Format('http://%s/in.php', [FHost]);
+
   Content := TStringStream.Create;
   try
     FHTTPClient.Post(URL, AFormData, Content);
@@ -120,8 +122,8 @@ var
   URL: string;
   Content: TStringStream;
 begin
-  URL := Format('http://rucaptcha.com/res.php?key=%s&action=reportbad&id=%s',
-    [FAPIKey, CaptchaId]);
+  URL := Format('http://%s/res.php?key=%s&action=reportbad&id=%s',
+    [FHost, FAPIKey, CaptchaId]);
 
   Content := TStringStream.Create;
   try
@@ -136,8 +138,8 @@ var
   URL: string;
   Content: TStringStream;
 begin
-  URL := Format('http://rucaptcha.com/res.php?key=%s&action=reportgood&id=%s',
-    [FAPIKey, CaptchaId]);
+  URL := Format('http://%s/res.php?key=%s&action=reportgood&id=%s',
+    [FHost, FAPIKey, CaptchaId]);
 
   Content := TStringStream.Create;
   try
