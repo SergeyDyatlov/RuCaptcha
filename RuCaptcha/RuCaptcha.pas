@@ -7,11 +7,12 @@ uses System.SysUtils, IdHTTP, IdMultipartFormData, BaseCaptcha;
 type
   ERuCaptchaError = class(Exception);
 
+{$M+}
+
   TRuCaptcha = class
   private
     FHTTPClient: TIdHTTP;
     FAPIKey: string;
-    FCaptchaId: string;
     FRequestTimeout: Integer;
   protected
     function GetBalance: string;
@@ -28,6 +29,8 @@ type
     property APIKey: string read FAPIKey write FAPIKey;
     property RequestTimeout: Integer read FRequestTimeout write FRequestTimeout;
   end;
+
+{$M-}
 
 implementation
 
@@ -58,11 +61,10 @@ begin
   URL := Format('http://rucaptcha.com/res.php?key=%s&action=get&id=%s',
     [FAPIKey, CaptchaId]);
 
-  Content := TStringStream.Create;
+  Content := TStringStream.Create('', TEncoding.UTF8);
   try
     FHTTPClient.Get(URL, Content);
     Result := ParseResponse(Content.DataString);
-    Result := UTF8Decode(Result);
   finally
     Content.Free;
   end;

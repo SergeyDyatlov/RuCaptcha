@@ -67,7 +67,6 @@ uses
 procedure TMainForm.btnSolveReCaptchaV2Click(Sender: TObject);
 var
   GoogleKey: string;
-  CaptchaResult: string;
   Element: IDispatch;
   PageURL: string;
 begin

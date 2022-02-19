@@ -21,7 +21,6 @@ type
   public
     constructor Create(const AFileName: string);
     function BuildFormData: TIdMultiPartFormDataStream; override;
-  published
     property FileName: string read FFileName write FFileName;
     property Phrase: Boolean read FPhrase write FPhrase;
     property CaseSensitive: Boolean read FCaseSensitive write FCaseSensitive;

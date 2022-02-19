@@ -13,7 +13,6 @@ type
   public
     constructor Create(const AText: string);
     function BuildFormData: TIdMultiPartFormDataStream; override;
-  published
     property Lang: string read FLang write FLang;
     property Text: string read FText write FText;
   end;

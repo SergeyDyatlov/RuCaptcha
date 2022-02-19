@@ -17,7 +17,6 @@ type
   public
     constructor Create(const AGoogleKey, APageURL: string);
     function BuildFormData: TIdMultiPartFormDataStream; override;
-  published
     property Version: string read FVersion write FVersion;
     property GoogleKey: string read FGoogleKey write FGoogleKey;
     property PageURL: string read FPageURL write FPageURL;
