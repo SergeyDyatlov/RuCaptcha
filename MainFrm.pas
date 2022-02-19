@@ -192,7 +192,7 @@ end;
 
 procedure TMainForm.btnSendReportClick(Sender: TObject);
 begin
-  FRuCaptcha.SendReport(edtCaptchaId.Text);
+  FRuCaptcha.ReportBad(edtCaptchaId.Text);
 end;
 
 procedure TMainForm.btnGoClick(Sender: TObject);

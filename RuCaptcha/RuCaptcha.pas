@@ -23,7 +23,8 @@ type
     constructor Create; virtual;
     destructor Destroy; override;
     procedure SolveCaptcha(Captcha: TBaseCaptcha);
-    procedure SendReport(const CaptchaId: string);
+    procedure ReportBad(const CaptchaId: string);
+    procedure ReportGood(const CaptchaId: string);
     property Balance: string read GetBalance;
   published
     property APIKey: string read FAPIKey write FAPIKey;
@@ -114,12 +115,28 @@ begin
   end;
 end;
 
-procedure TRuCaptcha.SendReport(const CaptchaId: string);
+procedure TRuCaptcha.ReportBad(const CaptchaId: string);
 var
   URL: string;
   Content: TStringStream;
 begin
   URL := Format('http://rucaptcha.com/res.php?key=%s&action=reportbad&id=%s',
+    [FAPIKey, CaptchaId]);
+
+  Content := TStringStream.Create;
+  try
+    FHTTPClient.Get(URL, Content);
+  finally
+    Content.Free;
+  end;
+end;
+
+procedure TRuCaptcha.ReportGood(const CaptchaId: string);
+var
+  URL: string;
+  Content: TStringStream;
+begin
+  URL := Format('http://rucaptcha.com/res.php?key=%s&action=reportgood&id=%s',
     [FAPIKey, CaptchaId]);
 
   Content := TStringStream.Create;
