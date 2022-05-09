@@ -9,6 +9,10 @@
 - Отправка отчета о неверно разгаданной капче.
 - Запрос баланса.
 
+```pascal
+FRuCaptcha := TRuCaptcha.Create;
+```
+
 ## Пример кода для простой капчи!
 ```pascal
 Captcha := TSimpleCaptcha.Create(FileName);
