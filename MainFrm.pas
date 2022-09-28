@@ -6,7 +6,8 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.ExtDlgs, JPEG, Vcl.ComCtrls, Vcl.OleCtrls,
-  SHDocVw, IdBaseComponent, IdAntiFreezeBase, IdAntiFreeze, RuCaptcha;
+  SHDocVw, IdBaseComponent, IdAntiFreezeBase, IdAntiFreeze, RuCaptcha,
+  System.Actions, Vcl.ActnList;
 
 type
   TMainForm = class(TForm)
@@ -14,36 +15,40 @@ type
     Label2: TLabel;
     lblShowBalance: TLabel;
     edtCaptchaId: TEdit;
-    btnSendReport: TButton;
+    btnReportBad: TButton;
     PageControl1: TPageControl;
     TabSheet1: TTabSheet;
     Label1: TLabel;
     Image1: TImage;
     Button1: TButton;
     btnSolveSimpleCaptcha: TButton;
-    edtCaptchaResult: TEdit;
     OpenPictureDialog1: TOpenPictureDialog;
     TabSheet2: TTabSheet;
     edtTextCaptcha: TEdit;
     btnSolveTextCaptcha: TButton;
-    edtTextCaptchaResult: TEdit;
     TabSheet3: TTabSheet;
     WebBrowser1: TWebBrowser;
-    Panel1: TPanel;
+    IdAntiFreeze1: TIdAntiFreeze;
+    edtCaptchaAnswer: TEdit;
+    btnReportGood: TButton;
+    lblCaptchaAnswer: TLabel;
+    lblCaptchaId: TLabel;
+    ActionList1: TActionList;
+    actReportGood: TAction;
+    actReportBad: TAction;
     edtURL: TEdit;
     btnGo: TButton;
-    Panel2: TPanel;
     btnSolveReCaptchaV2: TButton;
-    IdAntiFreeze1: TIdAntiFreeze;
     procedure Button1Click(Sender: TObject);
     procedure btnSolveSimpleCaptchaClick(Sender: TObject);
     procedure lblShowBalanceClick(Sender: TObject);
-    procedure btnSendReportClick(Sender: TObject);
     procedure btnSolveTextCaptchaClick(Sender: TObject);
     procedure btnGoClick(Sender: TObject);
     procedure btnSolveReCaptchaV2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure actReportBadExecute(Sender: TObject);
+    procedure actReportGoodExecute(Sender: TObject);
   private
     { Private declarations }
     FRuCaptcha: TRuCaptcha;
@@ -70,11 +75,14 @@ var
   Element: IDispatch;
   PageURL: string;
 begin
+  edtCaptchaAnswer.Text := EmptyStr;
+  edtCaptchaId.Text := EmptyStr;
   btnSolveReCaptchaV2.Enabled := False;
+  FRuCaptcha.APIKey := edtAPIKey.Text;
+
   Element := GetElementById(WebBrowser1.Document, 'recaptcha-demo');
   GoogleKey := (Element as IHTMLElement).getAttribute('data-sitekey', 0);
   PageURL := WebBrowser1.LocationURL;
-  FRuCaptcha.APIKey := edtAPIKey.Text;
 
   TTask.Run(
     procedure
@@ -96,6 +104,7 @@ begin
               'recaptcha-demo-submit');
             (Element as IHTMLElement).click;
 
+            edtCaptchaAnswer.Text := Captcha.Answer;
             edtCaptchaId.Text := Captcha.Id;
             btnSolveReCaptchaV2.Enabled := True;
           end);
@@ -107,6 +116,8 @@ end;
 
 procedure TMainForm.btnSolveTextCaptchaClick(Sender: TObject);
 begin
+  edtCaptchaAnswer.Text := EmptyStr;
+  edtCaptchaId.Text := EmptyStr;
   btnSolveTextCaptcha.Enabled := False;
   FRuCaptcha.APIKey := edtAPIKey.Text;
 
@@ -123,7 +134,7 @@ begin
         TThread.Synchronize(TThread.Current,
           procedure
           begin
-            edtTextCaptchaResult.Text := Captcha.Answer;
+            edtCaptchaAnswer.Text := Captcha.Answer;
             edtCaptchaId.Text := Captcha.Id;
             btnSolveTextCaptcha.Enabled := True;
           end);
@@ -154,6 +165,8 @@ end;
 
 procedure TMainForm.btnSolveSimpleCaptchaClick(Sender: TObject);
 begin
+  edtCaptchaAnswer.Text := EmptyStr;
+  edtCaptchaId.Text := EmptyStr;
   btnSolveSimpleCaptcha.Enabled := False;
   FRuCaptcha.APIKey := edtAPIKey.Text;
 
@@ -180,7 +193,7 @@ begin
         TThread.Synchronize(TThread.Current,
           procedure
           begin
-            edtCaptchaResult.Text := Captcha.Answer;
+            edtCaptchaAnswer.Text := Captcha.Answer;
             edtCaptchaId.Text := Captcha.Id;
             btnSolveSimpleCaptcha.Enabled := True;
           end);
@@ -190,9 +203,14 @@ begin
     end);
 end;
 
-procedure TMainForm.btnSendReportClick(Sender: TObject);
+procedure TMainForm.actReportBadExecute(Sender: TObject);
 begin
   FRuCaptcha.ReportBad(edtCaptchaId.Text);
+end;
+
+procedure TMainForm.actReportGoodExecute(Sender: TObject);
+begin
+  FRuCaptcha.ReportGood(edtCaptchaId.Text);
 end;
 
 procedure TMainForm.btnGoClick(Sender: TObject);
