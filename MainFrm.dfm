@@ -165,45 +165,27 @@ object MainForm: TMainForm
     object TabSheet3: TTabSheet
       Caption = 'ReCaptchaV2'
       ImageIndex = 2
-      object WebBrowser1: TWebBrowser
-        Left = 230
-        Top = 49
-        Width = 339
-        Height = 388
-        Align = alCustom
+      inline ReCaptchaFrame1: TReCaptchaFrame
+        Left = 0
+        Top = 0
+        Width = 792
+        Height = 567
+        Align = alClient
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -15
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
         TabOrder = 0
-        ControlData = {
-          4C000000092300001A2800000000000000000000000000000000000000000000
-          000000004C000000000000000000000001000000E0D057007335CF11AE690800
-          2B2E126208000000000000004C0000000114020000000000C000000000000046
-          8000000000000000000000000000000000000000000000000000000000000000
-          00000000000000000100000000000000000000000000000000000000}
-      end
-      object edtURL: TEdit
-        Left = 230
-        Top = 3
-        Width = 283
-        Height = 26
-        TabOrder = 1
-        Text = 'https://www.google.com/recaptcha/api2/demo'
-      end
-      object btnGo: TButton
-        Left = 519
-        Top = 3
-        Width = 50
-        Height = 27
-        Caption = 'Go'
-        TabOrder = 2
-        OnClick = btnGoClick
-      end
-      object btnSolveReCaptchaV2: TButton
-        Left = 441
-        Top = 450
-        Width = 128
-        Height = 32
-        Caption = #1056#1072#1079#1075#1072#1076#1072#1090#1100
-        TabOrder = 3
-        OnClick = btnSolveReCaptchaV2Click
+        inherited WebBrowser1: TWebBrowser
+          ControlData = {
+            4C000000092300001A2800000000000000000000000000000000000000000000
+            000000004C000000000000000000000001000000E0D057007335CF11AE690800
+            2B2E126208000000000000004C0000000114020000000000C000000000000046
+            8000000000000000000000000000000000000000000000000000000000000000
+            00000000000000000100000000000000000000000000000000000000}
+        end
       end
     end
     object TabSheet4: TTabSheet
@@ -222,6 +204,10 @@ object MainForm: TMainForm
         Font.Style = []
         ParentFont = False
         TabOrder = 0
+        ExplicitLeft = 64
+        ExplicitTop = 17
+        ExplicitWidth = 792
+        ExplicitHeight = 567
         inherited WebBrowser1: TWebBrowser
           ControlData = {
             4C000000092300001A2800000000000000000000000000000000000000000000

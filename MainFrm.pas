@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.ExtDlgs, JPEG, Vcl.ComCtrls, Vcl.OleCtrls,
   SHDocVw, IdBaseComponent, IdAntiFreezeBase, IdAntiFreeze, RuCaptcha,
-  System.Actions, Vcl.ActnList, HCaptchaFrm;
+  System.Actions, Vcl.ActnList, HCaptchaFrm, ReCaptchaFrm;
 
 type
   TMainForm = class(TForm)
@@ -27,7 +27,6 @@ type
     edtTextCaptcha: TEdit;
     btnSolveTextCaptcha: TButton;
     TabSheet3: TTabSheet;
-    WebBrowser1: TWebBrowser;
     IdAntiFreeze1: TIdAntiFreeze;
     edtCaptchaAnswer: TEdit;
     btnReportGood: TButton;
@@ -36,17 +35,13 @@ type
     ActionList1: TActionList;
     actReportGood: TAction;
     actReportBad: TAction;
-    edtURL: TEdit;
-    btnGo: TButton;
-    btnSolveReCaptchaV2: TButton;
     TabSheet4: TTabSheet;
     HCaptchaFrame1: THCaptchaFrame;
+    ReCaptchaFrame1: TReCaptchaFrame;
     procedure Button1Click(Sender: TObject);
     procedure btnSolveSimpleCaptchaClick(Sender: TObject);
     procedure lblShowBalanceClick(Sender: TObject);
     procedure btnSolveTextCaptchaClick(Sender: TObject);
-    procedure btnGoClick(Sender: TObject);
-    procedure btnSolveReCaptchaV2Click(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure actReportBadExecute(Sender: TObject);
@@ -69,51 +64,7 @@ implementation
 {$R *.dfm}
 
 uses
-  SimpleCaptcha, TextCaptcha, ReCaptcha, WBUtils, MSHTML, System.Threading;
-
-procedure TMainForm.btnSolveReCaptchaV2Click(Sender: TObject);
-var
-  GoogleKey: string;
-  Element: IDispatch;
-  PageURL: string;
-begin
-  edtCaptchaAnswer.Text := EmptyStr;
-  edtCaptchaId.Text := EmptyStr;
-  btnSolveReCaptchaV2.Enabled := False;
-
-  Element := GetElementById(WebBrowser1.Document, 'recaptcha-demo');
-  GoogleKey := (Element as IHTMLElement).getAttribute('data-sitekey', 0);
-  PageURL := WebBrowser1.LocationURL;
-
-  TTask.Run(
-    procedure
-    var
-      Captcha: TReCaptcha;
-    begin
-      Captcha := TReCaptcha.Create(GoogleKey, PageURL);
-      try
-        FRuCaptcha.SolveCaptcha(Captcha);
-      finally
-        TThread.Synchronize(TThread.Current,
-          procedure
-          begin
-            Element := GetElementById(WebBrowser1.Document,
-              'g-recaptcha-response');
-            (Element as IHTMLTextAreaElement).Value := Captcha.Answer;
-
-            Element := GetElementById(WebBrowser1.Document,
-              'recaptcha-demo-submit');
-            (Element as IHTMLElement).click;
-
-            edtCaptchaAnswer.Text := Captcha.Answer;
-            edtCaptchaId.Text := Captcha.Id;
-            btnSolveReCaptchaV2.Enabled := True;
-          end);
-
-        Captcha.Free;
-      end;
-    end);
-end;
+  SimpleCaptcha, TextCaptcha, WBUtils, MSHTML, System.Threading;
 
 procedure TMainForm.btnSolveTextCaptchaClick(Sender: TObject);
 begin
@@ -215,11 +166,6 @@ end;
 procedure TMainForm.actReportGoodExecute(Sender: TObject);
 begin
   FRuCaptcha.ReportGood(edtCaptchaId.Text);
-end;
-
-procedure TMainForm.btnGoClick(Sender: TObject);
-begin
-  WebBrowser1.Navigate(edtURL.Text);
 end;
 
 procedure TMainForm.lblShowBalanceClick(Sender: TObject);

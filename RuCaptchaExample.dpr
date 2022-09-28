@@ -10,7 +10,8 @@ uses
   SimpleCaptcha in 'RuCaptcha\Captcha\SimpleCaptcha.pas',
   HCaptcha in 'RuCaptcha\Captcha\HCaptcha.pas',
   HCaptchaFrm in 'HCaptchaFrm.pas' {HCaptchaFrame: TFrame},
-  WBUtils in 'WBUtils.pas';
+  WBUtils in 'WBUtils.pas',
+  ReCaptchaFrm in 'ReCaptchaFrm.pas' {ReCaptchaFrame: TFrame};
 
 {$R *.res}
 
