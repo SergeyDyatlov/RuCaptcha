@@ -18,13 +18,13 @@ object TextCaptchaFrame: TTextCaptchaFrame
     TabOrder = 0
     Text = #1045#1089#1083#1080' '#1079#1072#1074#1090#1088#1072' '#1089#1091#1073#1073#1086#1090#1072', '#1090#1086' '#1082#1072#1082#1086#1081' '#1089#1077#1075#1086#1076#1085#1103' '#1076#1077#1085#1100'?'
   end
-  object btnSolveTextCaptcha: TButton
+  object btnSolveCaptcha: TButton
     Left = 447
     Top = 327
     Width = 128
     Height = 32
     Caption = #1056#1072#1079#1075#1072#1076#1072#1090#1100
     TabOrder = 1
-    OnClick = btnSolveTextCaptchaClick
+    OnClick = btnSolveCaptchaClick
   end
 end

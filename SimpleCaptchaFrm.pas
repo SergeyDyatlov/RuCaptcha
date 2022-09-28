@@ -1,19 +1,24 @@
-unit TextCaptchaFrm;
+unit SimpleCaptchaFrm;
 
 interface
 
 uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
-  Vcl.StdCtrls, RuCaptcha, TextCaptcha;
+  Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.ExtDlgs, RuCaptcha, SimpleCaptcha;
 
 type
-  TTextCaptchaFrame = class(TFrame)
-    edtTextCaptcha: TEdit;
+  TSimpleCaptchaFrame = class(TFrame)
+    Label1: TLabel;
+    Button1: TButton;
+    Image1: TImage;
     btnSolveCaptcha: TButton;
+    OpenPictureDialog1: TOpenPictureDialog;
     procedure btnSolveCaptchaClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
+    FFileName: string;
   public
     { Public declarations }
   end;
@@ -25,7 +30,7 @@ uses
 
 {$R *.dfm}
 
-procedure TTextCaptchaFrame.btnSolveCaptchaClick(Sender: TObject);
+procedure TSimpleCaptchaFrame.btnSolveCaptchaClick(Sender: TObject);
 begin
   MainForm.edtCaptchaId.Text := EmptyStr;
   MainForm.edtCaptchaAnswer.Text := EmptyStr;
@@ -34,11 +39,10 @@ begin
   TTask.Run(
     procedure
     var
-      Captcha: TTextCaptcha;
+      Captcha: TSimpleCaptcha;
     begin
-      Captcha := TTextCaptcha.Create(edtTextCaptcha.Text);
+      Captcha := TSimpleCaptcha.Create(FFileName);
       try
-        Captcha.Lang := 'ru';
         MainForm.RuCaptcha.SolveCaptcha(Captcha);
       finally
         TThread.Synchronize(TThread.Current,
@@ -52,6 +56,15 @@ begin
         Captcha.Free;
       end;
     end);
+end;
+
+procedure TSimpleCaptchaFrame.Button1Click(Sender: TObject);
+begin
+  if OpenPictureDialog1.Execute then
+  begin
+    FFileName := OpenPictureDialog1.FileName;
+    Image1.Picture.LoadFromFile(FFileName);
+  end;
 end;
 
 end.

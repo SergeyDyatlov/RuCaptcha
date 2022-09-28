@@ -12,7 +12,8 @@ uses
   HCaptchaFrm in 'HCaptchaFrm.pas' {HCaptchaFrame: TFrame},
   WBUtils in 'WBUtils.pas',
   ReCaptchaFrm in 'ReCaptchaFrm.pas' {ReCaptchaFrame: TFrame},
-  TextCaptchaFrm in 'TextCaptchaFrm.pas' {TextCaptchaFrame: TFrame};
+  TextCaptchaFrm in 'TextCaptchaFrm.pas' {TextCaptchaFrame: TFrame},
+  SimpleCaptchaFrm in 'SimpleCaptchaFrm.pas' {SimpleCaptchaFrame: TFrame};
 
 {$R *.res}
 

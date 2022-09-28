@@ -25,20 +25,20 @@ object MainForm: TMainForm
     Height = 18
     Caption = 'RuCaptcha API Key'
   end
-  object lblShowBalance: TLabel
-    Left = 731
-    Top = 10
-    Width = 50
+  object lblBalance: TLabel
+    Left = 667
+    Top = 35
+    Width = 70
     Height = 19
     Cursor = crHandPoint
-    Caption = #1041#1072#1083#1072#1085#1089
+    Caption = #1041#1072#1083#1072#1085#1089': 0'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clBlue
     Font.Height = -16
     Font.Name = 'Tahoma'
     Font.Style = [fsUnderline]
     ParentFont = False
-    OnClick = lblShowBalanceClick
+    OnClick = lblBalanceClick
   end
   object lblCaptchaAnswer: TLabel
     Left = 20
@@ -91,54 +91,19 @@ object MainForm: TMainForm
     Top = 78
     Width = 800
     Height = 600
-    ActivePage = TabSheet2
+    ActivePage = TabSheet1
     TabOrder = 3
     object TabSheet1: TTabSheet
       Caption = #1054#1073#1099#1095#1085#1099#1077' '#1082#1072#1087#1095#1080
-      object Label1: TLabel
-        Left = 205
-        Top = 97
-        Width = 143
-        Height = 19
-        Caption = #1042#1099#1073#1077#1088#1080#1090#1077' '#1082#1072#1088#1090#1080#1085#1082#1091
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -16
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentFont = False
-      end
-      object Image1: TImage
-        Left = 205
-        Top = 138
-        Width = 351
-        Height = 209
-        Center = True
-        Proportional = True
-      end
-      object Button1: TButton
-        Left = 428
-        Top = 92
-        Width = 128
-        Height = 32
-        Caption = #1054#1073#1079#1086#1088
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -15
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentFont = False
+      inline SimpleCaptchaFrame1: TSimpleCaptchaFrame
+        Left = 0
+        Top = 0
+        Width = 792
+        Height = 567
+        Align = alClient
         TabOrder = 0
-        OnClick = Button1Click
-      end
-      object btnSolveSimpleCaptcha: TButton
-        Left = 428
-        Top = 361
-        Width = 128
-        Height = 32
-        Caption = #1056#1072#1079#1075#1072#1076#1072#1090#1100
-        TabOrder = 1
-        OnClick = btnSolveSimpleCaptchaClick
+        ExplicitLeft = -8
+        ExplicitTop = -33
       end
     end
     object TabSheet2: TTabSheet
@@ -235,11 +200,6 @@ object MainForm: TMainForm
     Height = 32
     Action = actReportGood
     TabOrder = 5
-  end
-  object OpenPictureDialog1: TOpenPictureDialog
-    FilterIndex = 0
-    Left = 328
-    Top = 35
   end
   object IdAntiFreeze1: TIdAntiFreeze
     Left = 48

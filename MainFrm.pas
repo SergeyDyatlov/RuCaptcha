@@ -7,22 +7,18 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.ExtDlgs, JPEG, Vcl.ComCtrls, Vcl.OleCtrls,
   SHDocVw, IdBaseComponent, IdAntiFreezeBase, IdAntiFreeze, RuCaptcha,
-  System.Actions, Vcl.ActnList, HCaptchaFrm, ReCaptchaFrm, TextCaptchaFrm;
+  System.Actions, Vcl.ActnList, HCaptchaFrm, ReCaptchaFrm, TextCaptchaFrm,
+  SimpleCaptchaFrm;
 
 type
   TMainForm = class(TForm)
     edtAPIKey: TEdit;
     Label2: TLabel;
-    lblShowBalance: TLabel;
+    lblBalance: TLabel;
     edtCaptchaId: TEdit;
     btnReportBad: TButton;
     PageControl1: TPageControl;
     TabSheet1: TTabSheet;
-    Label1: TLabel;
-    Image1: TImage;
-    Button1: TButton;
-    btnSolveSimpleCaptcha: TButton;
-    OpenPictureDialog1: TOpenPictureDialog;
     TabSheet2: TTabSheet;
     TabSheet3: TTabSheet;
     IdAntiFreeze1: TIdAntiFreeze;
@@ -37,9 +33,8 @@ type
     HCaptchaFrame1: THCaptchaFrame;
     ReCaptchaFrame1: TReCaptchaFrame;
     TextCaptchaFrame1: TTextCaptchaFrame;
-    procedure Button1Click(Sender: TObject);
-    procedure btnSolveSimpleCaptchaClick(Sender: TObject);
-    procedure lblShowBalanceClick(Sender: TObject);
+    SimpleCaptchaFrame1: TSimpleCaptchaFrame;
+    procedure lblBalanceClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure actReportBadExecute(Sender: TObject);
@@ -48,7 +43,6 @@ type
   private
     { Private declarations }
     FRuCaptcha: TRuCaptcha;
-    FFileName: string;
   public
     { Public declarations }
     property RuCaptcha: TRuCaptcha read FRuCaptcha;
@@ -61,21 +55,10 @@ implementation
 
 {$R *.dfm}
 
-uses
-  SimpleCaptcha, TextCaptcha, WBUtils, MSHTML, System.Threading;
-
-procedure TMainForm.Button1Click(Sender: TObject);
-begin
-  if OpenPictureDialog1.Execute then
-  begin
-    FFileName := OpenPictureDialog1.FileName;
-    Image1.Picture.LoadFromFile(FFileName);
-  end;
-end;
-
 procedure TMainForm.edtAPIKeyChange(Sender: TObject);
 begin
   FRuCaptcha.APIKey := edtAPIKey.Text;
+  lblBalance.OnClick(Sender);
 end;
 
 procedure TMainForm.FormCreate(Sender: TObject);
@@ -88,34 +71,6 @@ begin
   FRuCaptcha.Free;
 end;
 
-procedure TMainForm.btnSolveSimpleCaptchaClick(Sender: TObject);
-begin
-  edtCaptchaId.Text := EmptyStr;
-  edtCaptchaAnswer.Text := EmptyStr;
-  btnSolveSimpleCaptcha.Enabled := False;
-
-  TTask.Run(
-    procedure
-    var
-      Captcha: TSimpleCaptcha;
-    begin
-      Captcha := TSimpleCaptcha.Create(FFileName);
-      try
-        FRuCaptcha.SolveCaptcha(Captcha);
-      finally
-        TThread.Synchronize(TThread.Current,
-          procedure
-          begin
-            edtCaptchaId.Text := Captcha.Id;
-            edtCaptchaAnswer.Text := Captcha.Answer;
-            btnSolveSimpleCaptcha.Enabled := True;
-          end);
-
-        Captcha.Free;
-      end;
-    end);
-end;
-
 procedure TMainForm.actReportBadExecute(Sender: TObject);
 begin
   FRuCaptcha.ReportBad(edtCaptchaId.Text);
@@ -126,9 +81,9 @@ begin
   FRuCaptcha.ReportGood(edtCaptchaId.Text);
 end;
 
-procedure TMainForm.lblShowBalanceClick(Sender: TObject);
+procedure TMainForm.lblBalanceClick(Sender: TObject);
 begin
-  ShowMessage(FRuCaptcha.Balance);
+  lblBalance.Caption := Format('Баланс: %s', [FRuCaptcha.Balance]);
 end;
 
 end.
