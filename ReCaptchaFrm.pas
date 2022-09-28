@@ -55,7 +55,6 @@ end;
 procedure TReCaptchaFrame.btnSolveCaptchaClick(Sender: TObject);
 var
   GoogleKey: string;
-  Element: IDispatch;
   PageURL: string;
 begin
   MainForm.edtCaptchaId.Text := EmptyStr;
