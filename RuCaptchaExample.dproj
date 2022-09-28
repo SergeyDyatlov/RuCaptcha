@@ -109,6 +109,13 @@
         <DCCReference Include="RuCaptcha\Captcha\ReCaptcha.pas"/>
         <DCCReference Include="RuCaptcha\Captcha\BaseCaptcha.pas"/>
         <DCCReference Include="RuCaptcha\Captcha\SimpleCaptcha.pas"/>
+        <DCCReference Include="RuCaptcha\Captcha\HCaptcha.pas"/>
+        <DCCReference Include="HCaptchaFrm.pas">
+            <Form>HCaptchaFrame</Form>
+            <FormType>dfm</FormType>
+            <DesignClass>TFrame</DesignClass>
+        </DCCReference>
+        <DCCReference Include="WBUtils.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

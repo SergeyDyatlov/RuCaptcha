@@ -7,7 +7,10 @@ uses
   TextCaptcha in 'RuCaptcha\Captcha\TextCaptcha.pas',
   ReCaptcha in 'RuCaptcha\Captcha\ReCaptcha.pas',
   BaseCaptcha in 'RuCaptcha\Captcha\BaseCaptcha.pas',
-  SimpleCaptcha in 'RuCaptcha\Captcha\SimpleCaptcha.pas';
+  SimpleCaptcha in 'RuCaptcha\Captcha\SimpleCaptcha.pas',
+  HCaptcha in 'RuCaptcha\Captcha\HCaptcha.pas',
+  HCaptchaFrm in 'HCaptchaFrm.pas' {HCaptchaFrame: TFrame},
+  WBUtils in 'WBUtils.pas';
 
 {$R *.res}
 

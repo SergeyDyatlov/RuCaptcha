@@ -4,8 +4,8 @@ object MainForm: TMainForm
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'MainForm'
-  ClientHeight = 679
-  ClientWidth = 802
+  ClientHeight = 773
+  ClientWidth = 831
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -41,15 +41,15 @@ object MainForm: TMainForm
     OnClick = lblShowBalanceClick
   end
   object lblCaptchaAnswer: TLabel
-    Left = 16
-    Top = 606
+    Left = 20
+    Top = 694
     Width = 178
     Height = 18
     Caption = #1056#1077#1079#1091#1083#1100#1090#1072#1090' '#1088#1072#1089#1087#1086#1079#1085#1072#1074#1072#1085#1080#1103
   end
   object lblCaptchaId: TLabel
-    Left = 408
-    Top = 609
+    Left = 439
+    Top = 697
     Width = 109
     Height = 18
     Caption = #1048#1076#1077#1085#1090#1080#1092#1080#1082#1072#1090#1086#1088
@@ -59,25 +59,28 @@ object MainForm: TMainForm
     Top = 35
     Width = 373
     Height = 27
+    Hint = '786cc5c7e99f51ac5725d122e95d1e02'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -16
     Font.Name = 'Tahoma'
     Font.Style = []
     ParentFont = False
+    ParentShowHint = False
+    ShowHint = True
     TabOrder = 0
-    Text = '786cc5c7e99f51ac5725d122e95d1e02'
+    OnChange = edtAPIKeyChange
   end
   object edtCaptchaId: TEdit
-    Left = 408
-    Top = 633
+    Left = 439
+    Top = 721
     Width = 145
     Height = 26
     TabOrder = 1
   end
   object btnReportBad: TButton
-    Left = 680
-    Top = 630
+    Left = 711
+    Top = 718
     Width = 105
     Height = 32
     Action = actReportBad
@@ -86,9 +89,9 @@ object MainForm: TMainForm
   object PageControl1: TPageControl
     Left = 16
     Top = 78
-    Width = 769
-    Height = 518
-    ActivePage = TabSheet3
+    Width = 800
+    Height = 600
+    ActivePage = TabSheet4
     TabOrder = 3
     object TabSheet1: TTabSheet
       Caption = #1054#1073#1099#1095#1085#1099#1077' '#1082#1072#1087#1095#1080
@@ -181,7 +184,7 @@ object MainForm: TMainForm
         Top = 3
         Width = 283
         Height = 26
-        TabOrder = 4
+        TabOrder = 1
         Text = 'https://www.google.com/recaptcha/api2/demo'
       end
       object btnGo: TButton
@@ -190,7 +193,7 @@ object MainForm: TMainForm
         Width = 50
         Height = 27
         Caption = 'Go'
-        TabOrder = 5
+        TabOrder = 2
         OnClick = btnGoClick
       end
       object btnSolveReCaptchaV2: TButton
@@ -199,14 +202,40 @@ object MainForm: TMainForm
         Width = 128
         Height = 32
         Caption = #1056#1072#1079#1075#1072#1076#1072#1090#1100
-        TabOrder = 6
+        TabOrder = 3
         OnClick = btnSolveReCaptchaV2Click
+      end
+    end
+    object TabSheet4: TTabSheet
+      Caption = 'hCaptcha'
+      ImageIndex = 3
+      inline HCaptchaFrame1: THCaptchaFrame
+        Left = 0
+        Top = 0
+        Width = 792
+        Height = 567
+        Align = alClient
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -15
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 0
+        inherited WebBrowser1: TWebBrowser
+          ControlData = {
+            4C000000092300001A2800000000000000000000000000000000000000000000
+            000000004C000000000000000000000001000000E0D057007335CF11AE690800
+            2B2E126208000000000000004C0000000114020000000000C000000000000046
+            8000000000000000000000000000000000000000000000000000000000000000
+            00000000000000000100000000000000000000000000000000000000}
+        end
       end
     end
   end
   object edtCaptchaAnswer: TEdit
-    Left = 16
-    Top = 633
+    Left = 20
+    Top = 721
     Width = 297
     Height = 26
     ParentShowHint = False
@@ -215,8 +244,8 @@ object MainForm: TMainForm
     TextHint = #1056#1077#1079#1091#1083#1100#1090#1072#1090
   end
   object btnReportGood: TButton
-    Left = 569
-    Top = 630
+    Left = 600
+    Top = 718
     Width = 105
     Height = 32
     Action = actReportGood

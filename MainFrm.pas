@@ -7,7 +7,7 @@ uses
   System.Classes, Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs,
   Vcl.ExtCtrls, Vcl.StdCtrls, Vcl.ExtDlgs, JPEG, Vcl.ComCtrls, Vcl.OleCtrls,
   SHDocVw, IdBaseComponent, IdAntiFreezeBase, IdAntiFreeze, RuCaptcha,
-  System.Actions, Vcl.ActnList;
+  System.Actions, Vcl.ActnList, HCaptchaFrm;
 
 type
   TMainForm = class(TForm)
@@ -39,6 +39,8 @@ type
     edtURL: TEdit;
     btnGo: TButton;
     btnSolveReCaptchaV2: TButton;
+    TabSheet4: TTabSheet;
+    HCaptchaFrame1: THCaptchaFrame;
     procedure Button1Click(Sender: TObject);
     procedure btnSolveSimpleCaptchaClick(Sender: TObject);
     procedure lblShowBalanceClick(Sender: TObject);
@@ -49,14 +51,14 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure actReportBadExecute(Sender: TObject);
     procedure actReportGoodExecute(Sender: TObject);
+    procedure edtAPIKeyChange(Sender: TObject);
   private
     { Private declarations }
     FRuCaptcha: TRuCaptcha;
     FFileName: string;
   public
     { Public declarations }
-    function GetElementById(const Document: IDispatch; ElementId: string)
-      : IDispatch;
+    property RuCaptcha: TRuCaptcha read FRuCaptcha;
   end;
 
 var
@@ -67,7 +69,7 @@ implementation
 {$R *.dfm}
 
 uses
-  SimpleCaptcha, TextCaptcha, ReCaptcha, MSHTML, System.Threading;
+  SimpleCaptcha, TextCaptcha, ReCaptcha, WBUtils, MSHTML, System.Threading;
 
 procedure TMainForm.btnSolveReCaptchaV2Click(Sender: TObject);
 var
@@ -78,7 +80,6 @@ begin
   edtCaptchaAnswer.Text := EmptyStr;
   edtCaptchaId.Text := EmptyStr;
   btnSolveReCaptchaV2.Enabled := False;
-  FRuCaptcha.APIKey := edtAPIKey.Text;
 
   Element := GetElementById(WebBrowser1.Document, 'recaptcha-demo');
   GoogleKey := (Element as IHTMLElement).getAttribute('data-sitekey', 0);
@@ -119,7 +120,6 @@ begin
   edtCaptchaAnswer.Text := EmptyStr;
   edtCaptchaId.Text := EmptyStr;
   btnSolveTextCaptcha.Enabled := False;
-  FRuCaptcha.APIKey := edtAPIKey.Text;
 
   TTask.Run(
     procedure
@@ -153,6 +153,11 @@ begin
   end;
 end;
 
+procedure TMainForm.edtAPIKeyChange(Sender: TObject);
+begin
+  FRuCaptcha.APIKey := edtAPIKey.Text;
+end;
+
 procedure TMainForm.FormCreate(Sender: TObject);
 begin
   FRuCaptcha := TRuCaptcha.Create;
@@ -168,7 +173,6 @@ begin
   edtCaptchaAnswer.Text := EmptyStr;
   edtCaptchaId.Text := EmptyStr;
   btnSolveSimpleCaptcha.Enabled := False;
-  FRuCaptcha.APIKey := edtAPIKey.Text;
 
   TTask.Run(
     procedure
@@ -216,12 +220,6 @@ end;
 procedure TMainForm.btnGoClick(Sender: TObject);
 begin
   WebBrowser1.Navigate(edtURL.Text);
-end;
-
-function TMainForm.GetElementById(const Document: IDispatch; ElementId: string)
-  : IDispatch;
-begin
-  Result := (Document as IHTMLDocument3).GetElementById(ElementId);
 end;
 
 procedure TMainForm.lblShowBalanceClick(Sender: TObject);
