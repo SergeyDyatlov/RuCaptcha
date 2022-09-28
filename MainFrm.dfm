@@ -91,7 +91,7 @@ object MainForm: TMainForm
     Top = 78
     Width = 800
     Height = 600
-    ActivePage = TabSheet4
+    ActivePage = TabSheet2
     TabOrder = 3
     object TabSheet1: TTabSheet
       Caption = #1054#1073#1099#1095#1085#1099#1077' '#1082#1072#1087#1095#1080
@@ -144,22 +144,21 @@ object MainForm: TMainForm
     object TabSheet2: TTabSheet
       Caption = #1058#1077#1082#1089#1090#1086#1074#1099#1077' '#1082#1072#1087#1095#1080
       ImageIndex = 1
-      object edtTextCaptcha: TEdit
-        Left = 205
-        Top = 229
-        Width = 350
-        Height = 26
+      inline TextCaptchaFrame1: TTextCaptchaFrame
+        Left = 0
+        Top = 0
+        Width = 792
+        Height = 567
+        Align = alClient
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -15
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
         TabOrder = 0
-        Text = #1045#1089#1083#1080' '#1079#1072#1074#1090#1088#1072' '#1089#1091#1073#1073#1086#1090#1072', '#1090#1086' '#1082#1072#1082#1086#1081' '#1089#1077#1075#1086#1076#1085#1103' '#1076#1077#1085#1100'?'
-      end
-      object btnSolveTextCaptcha: TButton
-        Left = 427
-        Top = 271
-        Width = 128
-        Height = 32
-        Caption = #1056#1072#1079#1075#1072#1076#1072#1090#1100
-        TabOrder = 1
-        OnClick = btnSolveTextCaptchaClick
+        ExplicitLeft = -8
+        ExplicitTop = -33
       end
     end
     object TabSheet3: TTabSheet
