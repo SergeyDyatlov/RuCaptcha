@@ -24,10 +24,9 @@ try
 finally
   Captcha.Free;
 end;
-  
-// Если что то пошло не так, отправляем отчет о неверно разгаданной капче
-// Аналогично для всех видов капч
-SimpleCaptcha.SendReport(CaptchaId);
+
+FRuCaptcha.ReportBad(CaptchaId);
+FRuCaptcha.ReportGood(CaptchaId);
 ```
 
 ## Пример кода для текстовой капчи!
